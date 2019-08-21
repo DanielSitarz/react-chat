@@ -1,0 +1,59 @@
+@import '../variables.scss';
+
+$defaultMessageBackground: #ECECEC;
+
+.group{
+    position: relative;    
+    margin-bottom: 1.5rem;            
+
+    background-color: $defaultMessageBackground;
+
+    border-radius: 0 0.25rem 0.25rem 0.25rem;
+
+    .sender{
+        position: absolute;
+        top: -0.5rem;        
+        background-color: white;
+        padding: 0 0.5rem;      
+        border-radius: 0 0.25rem 0 0;
+        box-shadow: 0 0.1rem 0.1rem 0 rgba(0, 0, 0, .25);
+    }    
+
+    ul{      
+        list-style: none;
+        padding: 0.75rem;
+        margin: 0;         
+    }           
+
+  
+
+    &.your{
+        background-color: #90CAF9; 
+    }
+
+    &.fromBot{        
+        background-color: #FFECB3;
+        .sender{
+            background-color: #FFE082;          
+        }
+    }
+
+    &.fromServer{                
+        font-size: 0.6rem;
+        font-weight: 700;            
+
+        background-color: transparent;
+        margin-top: -0.5rem;
+        margin-bottom: 1rem;
+        .sender{
+            display: none;
+        }
+        li{
+            display: inline-block;          
+            margin-right: 0.5rem;                          
+        }
+        ul{
+            padding: 0.1rem;
+        }
+    }
+}

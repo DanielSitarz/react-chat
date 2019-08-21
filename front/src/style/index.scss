@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+@import 'variables.scss';
+
+body{  
+  font-family: 'Roboto', sans-serif;     
+
+  font-size: 12px;
+}
+
+:global {
+  html, body, #app{
+    height: 100%; 
+    width: 100%;
+  }
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ button{     
+  border: none;  
+  font-weight: 700;            
+  background: #03A9F4;        
+  color: #ffffff;      
+  text-decoration: none;      
+  &:hover {
+    background: #3cb0fd;        
+    text-decoration: none;
+  }
+  &:active{
+    background: #1cb05d;        
+  }
+} 
+
+.messagesData{
+    position: absolute;
+    right: 0;
+    top: 0;    
+    width: 40%;
+    padding: 1rem;
+}

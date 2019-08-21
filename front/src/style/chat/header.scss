@@ -1,0 +1,34 @@
+@import '../variables.scss';
+
+.header{
+    flex: 1 0 auto;
+    display: flex; 
+    justify-content: center;
+    z-index: 1;
+
+    background-color: $mainColor;    
+
+    font-size: 16px;
+    font-weight: 700;
+    max-height: 3rem;        
+
+    @media screen and (max-width: $mobileBreak){
+        font-size: 13px;                
+    }
+
+    .userName, .roomName{        
+        display: flex;                 
+        align-items: center;   
+        justify-content: center;     
+
+        padding: 0 0.5rem;
+    }
+
+    .userName{       
+        flex: 1 0 auto;                
+    }
+
+    .roomName{
+        flex: 1 0 auto;
+    }    
+}
