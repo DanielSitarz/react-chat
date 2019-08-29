@@ -1,9 +1,9 @@
-import React, {PropTypes} from 'react'
+import * as React from 'react'
 import store from '../store/store'
 
 import messegesGroupStyle from '../style/chat/messagesGroup.scss'
 
-import Message from './Message.jsx'
+import Message from './Message'
 
 const getStyle = (msgs = []) => {
   let style = [messegesGroupStyle.group]
@@ -17,11 +17,11 @@ const getStyle = (msgs = []) => {
   return style.join(' ')
 }
 
-function parseTime (ms) {
+function parseTime(ms) {
   return new Date(ms).toLocaleTimeString()
 }
 
-function MessageGroup ({msgs, bots}) {
+function MessageGroup({ msgs, bots }) {
   return (
     <li className={getStyle(msgs)}>
       <div className={messegesGroupStyle.sender}>
@@ -38,10 +38,6 @@ function MessageGroup ({msgs, bots}) {
       </ul>
     </li>
   )
-}
-
-MessageGroup.PropTypes = {
-  msgs: PropTypes.array
 }
 
 export default MessageGroup

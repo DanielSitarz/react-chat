@@ -1,27 +1,28 @@
 export default class NewMessageNotification {
-  constructor (config = {}) {
+  config: any;
+  newMessageTitleChanger = null;
+  originalTitle = document.title;
+  isFocused = true;
+
+  constructor(config = {}) {
     this.config = Object.assign({
       titleNotificationText: 'New message',
       titleChangeInterval: 1000
     }, config)
 
-    this.newMessageTitleChanger = null
-    this.originalTitle = document.title
-    this.isFocused = true
-
     this.bindHandlers()
     this.addEvents()
   }
-  bindHandlers () {
+  bindHandlers() {
     this.handleFocus = this.handleFocus.bind(this)
     this.handleBlur = this.handleBlur.bind(this)
   }
-  addEvents () {
+  addEvents() {
     window.addEventListener('focus', this.handleFocus, false)
     window.addEventListener('blur', this.handleBlur, false)
   }
 
-  notify () {
+  notify() {
     if (this.isFocused) return
 
     this.setNotificationTitle()
@@ -33,7 +34,7 @@ export default class NewMessageNotification {
    * Title Changer
    */
 
-  runTitleChanger () {
+  runTitleChanger() {
     if (this.newMessageTitleChanger) { clearInterval(this.newMessageTitleChanger) }
 
     let i = 0
@@ -42,11 +43,11 @@ export default class NewMessageNotification {
       i++
     }, this.config.titleChangeInterval)
   }
-  stopTitleChanger () {
+  stopTitleChanger() {
     window.clearInterval(this.newMessageTitleChanger)
     this.newMessageTitleChanger = null
   }
-  switchTitle (i) {
+  switchTitle(i) {
     if (i % 2 === 1) {
       this.setNotificationTitle()
     } else {
@@ -58,13 +59,13 @@ export default class NewMessageNotification {
    * Title Helpers
    */
 
-  setDocumentTitle (newTitle) {
+  setDocumentTitle(newTitle) {
     document.title = newTitle
   }
-  setNotificationTitle () {
+  setNotificationTitle() {
     this.setDocumentTitle(this.config.titleNotificationText)
   }
-  resetTitleToOriginalState () {
+  resetTitleToOriginalState() {
     this.setDocumentTitle(this.originalTitle)
   }
 
@@ -72,7 +73,7 @@ export default class NewMessageNotification {
   * Events Handlers
   */
 
-  handleFocus () {
+  handleFocus() {
     this.isFocused = true
 
     if (!this.newMessageTitleChanger) return
@@ -80,7 +81,7 @@ export default class NewMessageNotification {
     this.stopTitleChanger()
     this.resetTitleToOriginalState()
   }
-  handleBlur () {
+  handleBlur() {
     this.isFocused = false
   }
 }

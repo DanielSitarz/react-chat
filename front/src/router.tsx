@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Router, Route } from 'react-router';
 
 import ChatContainer from './containers/ChatContainer';

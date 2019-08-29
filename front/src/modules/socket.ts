@@ -1,7 +1,7 @@
-import io from 'socket.io-client'
-import store from '../store/store.js'
+import 'socket.io-client'
+import store from '../store/store'
 import callbacksController from './callbacksController'
-import { addMessage, userEnterTheRoom, userDisconnected, isTyping, stoppedTyping } from '../store/actionCreators'
+import { userEnterTheRoom, userDisconnected, isTyping, stoppedTyping } from '../store/actionCreators'
 
 const events = {
   USER_ENTER_ROOM: 'user enter room',
@@ -12,7 +12,7 @@ const events = {
   USER_CHANGED_NAME: 'user changed name'
 }
 
-export default (function socket () {
+export default (function socket() {
   const ioSocket = io('https://socket-chat-server-to-react.herokuapp.com/')
 
   ioSocket.on(events.USER_SENT_MESSAGE, _onReceiveMessage)
@@ -34,42 +34,42 @@ export default (function socket () {
   /**
    * Public methods
    */
-  function userEnterRoom (userName, roomName) {
+  function userEnterRoom(userName, roomName) {
     ioSocket.emit(events.USER_ENTER_ROOM, { userName: userName, roomName: roomName })
   }
-  function userSentMessage (msg) {
+  function userSentMessage(msg) {
     ioSocket.emit(events.USER_SENT_MESSAGE, msg)
   }
-  function userIsTyping (userName) {
+  function userIsTyping(userName) {
     ioSocket.emit(events.USER_IS_TYPING, userName)
   }
-  function userStoppedTyping (userName) {
+  function userStoppedTyping(userName) {
     ioSocket.emit(events.USER_STOPPED_TYPING, userName)
   }
 
   /**
    * Private events
    */
-  function _onUserEnterTheRoom (userName) {
+  function _onUserEnterTheRoom(userName) {
     store.dispatch(userEnterTheRoom(userName))
     callbacks.callAll('onUserEnterTheRoom', userName)
   }
-  function _onUserDisconnected (userName) {
+  function _onUserDisconnected(userName) {
     store.dispatch(userDisconnected(userName))
     callbacks.callAll('onUserDisconnected', userName)
   }
-  function _onUserChangedName (data) {
+  function _onUserChangedName(data) {
     callbacks.callAll('onUserChangedName', data)
   }
-  function _onTypingStart (userName) {
+  function _onTypingStart(userName) {
     store.dispatch(isTyping(userName))
     callbacks.callAll('onTypingStart', userName)
   }
-  function _onTypingStop (userName) {
+  function _onTypingStop(userName) {
     store.dispatch(stoppedTyping(userName))
     callbacks.callAll('onTypingStop', userName)
   }
-  function _onReceiveMessage (data) {
+  function _onReceiveMessage(data) {
     callbacks.callAll('onReceiveMessage', data)
   }
 

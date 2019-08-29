@@ -1,12 +1,14 @@
-import React, { PureComponent } from 'react'
+import * as React from 'react'
 import pendingMessage from '../modules/pendingMessage'
 import style from '../style/Chat.scss'
 
-class Control extends PureComponent {
-  constructor (props) {
-    super()
+class Control extends React.PureComponent<any, any> {
+  isSendingMsg = false;
+  aborted = false;
+  messageInput: HTMLElement;
 
-    this.isSendingMsg = false
+  constructor(props) {
+    super(props)
 
     pendingMessage.callbacks.add('onAbort', () => { this.abort() })
     pendingMessage.callbacks.add('onSend', () => { this.cleanupSend() })
@@ -15,7 +17,7 @@ class Control extends PureComponent {
     this.handleKeyUp = this.handleKeyUp.bind(this)
     document.addEventListener('keypress', this.handleKeyPress.bind(this))
   }
-  handleKeyPress (e) {
+  handleKeyPress(e) {
     if (this.isSendingMsg) {
       e.preventDefault()
       return
@@ -27,18 +29,18 @@ class Control extends PureComponent {
       e.preventDefault()
     }
   }
-  handleKeyUp (e) {
+  handleKeyUp(e) {
     if (e.keyCode === 13) {
       document.removeEventListener('keyup', this.handleKeyUp)
       this.handleSendButtonRelease()
     }
   }
-  handleSendButtonDown () {
+  handleSendButtonDown() {
     if (this.isSendingMsg === true) return
     if (this.messageInput.textContent === '') return
     this.startMessageSend()
   }
-  handleSendButtonRelease () {
+  handleSendButtonRelease() {
     if (!this.isSendingMsg) return
     if (this.aborted) {
       this.isSendingMsg = false
@@ -47,22 +49,22 @@ class Control extends PureComponent {
     }
     pendingMessage.send()
   }
-  startMessageSend () {
+  startMessageSend() {
     if (this.isSendingMsg === true) return
     pendingMessage.set(this.messageInput.textContent)
     this.isSendingMsg = true
   }
-  cleanupSend () {
+  cleanupSend() {
     this.isSendingMsg = false
     this.messageInput.textContent = ''
     this.messageInput.focus()
   }
-  abort () {
+  abort() {
     this.aborted = true
   }
-  render () {
+  render() {
     return (
-      <div autoComplete='off' className={style.chatControl}>
+      <div className={style.chatControl}>
         <div
           className={style.messageInput}
           contentEditable
@@ -72,10 +74,10 @@ class Control extends PureComponent {
         />
         <button
           type='button'
-          onTouchStart={(e) => { this.handleSendButtonDown(e) }}
-          onTouchEnd={(e) => { this.handleSendButtonRelease(e) }}
-          onMouseDown={(e) => { this.handleSendButtonDown(e) }}
-          onMouseUp={(e) => { this.handleSendButtonRelease(e) }}
+          onTouchStart={(e) => { this.handleSendButtonDown() }}
+          onTouchEnd={(e) => { this.handleSendButtonRelease() }}
+          onMouseDown={(e) => { this.handleSendButtonDown() }}
+          onMouseUp={(e) => { this.handleSendButtonRelease() }}
         >
           Send
         </button>

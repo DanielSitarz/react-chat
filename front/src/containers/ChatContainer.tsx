@@ -1,9 +1,8 @@
-import React from 'react'
+import * as React from 'react'
 import { connect } from 'react-redux'
 
-import style from '../style/Chat.scss'
+import * as style from '../style/Chat.scss'
 
-/* Components */
 import Header from '../components/Header'
 import Messages from '../components/Messages'
 import Control from '../components/Control'
@@ -19,20 +18,20 @@ import pendingMessage from '../modules/pendingMessage'
 
 import bots from '../bots/bots'
 
-class ChatContainer extends React.Component {
-  constructor (props) {
+class ChatContainer extends React.Component<any, any> {
+  isTypingTimeout = null;
+  newMessageNotification = new NewMessageNotification();
+  bots: any;
+
+  constructor(props) {
     super(props)
-
-    this.isTypingTimeout = null
-
-    this.newMessageNotification = new NewMessageNotification()
 
     this.handleMessageTyping = this.handleMessageTyping.bind(this)
 
     this.setupCallbacks()
     this.enterRoom()
   }
-  setupCallbacks () {
+  setupCallbacks() {
     socket.callbacks.add('onReceiveMessage', (data) => {
       let wasBotModifierTag = false
       // if received message was just a bot command to modify message
@@ -54,13 +53,13 @@ class ChatContainer extends React.Component {
       bots.forEach((bot) => bot.check(msg.content))
     })
   }
-  enterRoom () {
+  enterRoom() {
     this.loadMessagesFromLocalStorage()
     store.dispatch(setRoomName(this.props.params.roomName))
     store.dispatch(userEnterTheRoom(this.props.userName))
     socket.userEnterRoom(this.props.userName, this.props.params.roomName)
   }
-  loadMessagesFromLocalStorage () {
+  loadMessagesFromLocalStorage() {
     let loadedMessages = JSON.parse(window.localStorage.getItem(this.props.params.roomName + '_messages'))
     if (loadedMessages) {
       store.dispatch(setMessages(loadedMessages))
@@ -68,7 +67,7 @@ class ChatContainer extends React.Component {
       this.sendWelcomeMessage()
     }
   }
-  sendWelcomeMessage () {
+  sendWelcomeMessage() {
     if (this.props.messages.size === 0) {
       let helloMsg = messagesCreator.create({
         roomName: 'Hello',
@@ -78,10 +77,10 @@ class ChatContainer extends React.Component {
       store.dispatch(addMessage(helloMsg))
     }
   }
-  saveMessagesToLocalStorage () {
+  saveMessagesToLocalStorage() {
     window.localStorage.setItem(this.props.params.roomName + '_messages', JSON.stringify(this.props.messages))
   }
-  handleMessageTyping (e) {
+  handleMessageTyping(e) {
     if (this.isTypingTimeout) {
       this.clearTypingTimeout()
       this.startTypingTimeout()
@@ -91,22 +90,22 @@ class ChatContainer extends React.Component {
     this.startTypingTimeout()
     socket.userIsTyping(this.props.userName)
   }
-  startTypingTimeout () {
+  startTypingTimeout() {
     this.isTypingTimeout = window.setTimeout(() => {
       store.dispatch(stoppedTyping(this.props.userName))
       socket.userStoppedTyping(this.props.userName)
       this.clearTypingTimeout()
     }, 3000)
   }
-  clearTypingTimeout () {
+  clearTypingTimeout() {
     window.clearTimeout(this.isTypingTimeout)
     this.isTypingTimeout = null
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     this.saveMessagesToLocalStorage()
   }
-  render () {
+  render() {
     let messages = this.props.messages
 
     if (this.props.pendingMessage) {

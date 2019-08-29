@@ -1,16 +1,18 @@
-import React from 'react'
-import Immutable from 'immutable'
+import * as React from 'react'
+import * as Immutable from 'immutable'
 
 import style from '../style/Chat.scss'
 
 import MessagesGroup from './MessagesGroup'
 
-class Messages extends React.Component {
-  constructor () {
-    super()
+class Messages extends React.Component<any, any> {
+  container: HTMLElement;
+
+  constructor(props) {
+    super(props)
     window.addEventListener('resize', () => this.scrollToBottom())
   }
-  groupMessages (msgs = []) {
+  groupMessages(msgs = []) {
     return msgs
       .reduce((groups, msg) => {
         if (groups.length > 0) {
@@ -28,16 +30,16 @@ class Messages extends React.Component {
         return (<MessagesGroup key={msgs[0].key} msgs={msgs} bots={this.props.bots} />)
       })
   }
-  scrollToBottom () {
+  scrollToBottom() {
     this.container.scrollTop = this.container.scrollHeight
   }
-  shouldComponentUpdate (prevProps) {
+  shouldComponentUpdate(prevProps) {
     return !Immutable.is(this.props.messages, prevProps.messages)
   }
-  componentDidUpdate () {
+  componentDidUpdate() {
     this.scrollToBottom()
   }
-  render () {
+  render() {
     return (
       <ul className={style.messagesContainer} ref={(ref) => { this.container = ref }}>
         {

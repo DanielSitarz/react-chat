@@ -1,12 +1,12 @@
 import store from '../store/store'
 import socket from './socket'
-import {stoppedTyping, addMessage} from '../store/actionCreators'
+import { stoppedTyping, addMessage } from '../store/actionCreators'
 import messagesCreator from '../helpers/messagesCreator'
 import callbacksController from './callbacksController'
 
-export default (function pendingMessage () {
+export default (function pendingMessage() {
   var { userName } = store.getState().chatState
-  var message = ''
+  var message: any = ''
   var power = 100
   var maxSendPower = 500
   var sendPowerDiff = maxSendPower - 100
@@ -15,7 +15,7 @@ export default (function pendingMessage () {
 
   var riseInterval
 
-  function set (msg) {
+  function set(msg) {
     callbacks.callAll('onSet')
     const newMessage = messagesCreator.create({
       sender: userName,
@@ -34,7 +34,7 @@ export default (function pendingMessage () {
     rise()
   }
 
-  function rise () {
+  function rise() {
     reset()
 
     riseInterval = window.setInterval(() => {
@@ -48,8 +48,8 @@ export default (function pendingMessage () {
     }, 50)
   }
 
-  function send () {
-    callbacks.callAll('onSend', message)
+  function send() {
+    callbacks.callAll('onSend')
 
     message.style = ''
     message.power = power
@@ -65,17 +65,17 @@ export default (function pendingMessage () {
     reset()
   }
 
-  function abort () {
+  function abort() {
     callbacks.callAll('onAbort')
     deleteMessage()
     reset()
   }
 
-  function deleteMessage () {
-    store.dispatch({type: 'DELETE_PENDING_MSG'})
+  function deleteMessage() {
+    store.dispatch({ type: 'DELETE_PENDING_MSG' })
   }
 
-  function reset () {
+  function reset() {
     if (riseInterval) window.clearInterval(riseInterval)
     riseInterval = undefined
     power = 100

@@ -17,9 +17,19 @@ module.exports = {
           }
         ]
       }, {
-        test: /\.s[ac]ss$/i,
-        exclude: /node_modules/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
+        test: /\.scss$/,
+        use: [
+          { loader: "style-loader" },
+          {
+            loader: "typings-for-css-modules-loader",
+            options: {
+              namedexport: true,
+              camelcase: true,
+              modules: true
+            }
+          },
+          { loader: "sass-loader" }
+        ]
       }, {
         enforce: "pre",
         test: /\.js$/,

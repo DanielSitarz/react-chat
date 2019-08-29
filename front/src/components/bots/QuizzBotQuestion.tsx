@@ -1,10 +1,27 @@
-import React, { Component } from 'react'
-import {COUNTRY, CAPITAL} from '../../bots/quizzBotConsts'
+import * as React from 'react'
+import { COUNTRY, CAPITAL } from '../../bots/quizzBotConsts'
 
 import style from '../../style/quizzBot.scss'
 
-class QuizzBotQuestion extends Component {
-  constructor (props) {
+interface QuizzBotQuestionProps {
+  id: any;
+  answersIndices: number[];
+  questionType: any;
+  answerType: any;
+  answerIndex: number;
+  countryIndex: number;
+  getCountryProperty: any;
+  handleAnswer: any;
+  userName: string;
+  chosenAnswerIndex: number;
+  question: string;
+}
+
+class QuizzBotQuestion extends React.Component<QuizzBotQuestionProps, any> {
+  correctButton: any;
+  buttons: any;
+
+  constructor(props) {
     super(props)
     this.correctButton = {}
     this.buttons = {}
@@ -27,7 +44,7 @@ class QuizzBotQuestion extends Component {
     })
   }
 
-  handleAnswerChoose (e, answer) {
+  handleAnswerChoose(e, answer) {
     if (!this.props.handleAnswer(answer, this.props.id)) return false
     if (answer === this.props.countryIndex) {
       e.target.className += style.correct
@@ -36,7 +53,7 @@ class QuizzBotQuestion extends Component {
       this.correctButton.className += style.correct
     }
   }
-  renderQuestion (questionType, answerType, answerIndex) {
+  renderQuestion(questionType, answerType, answerIndex) {
     this.props.getCountryProperty(answerIndex, answerType).then((r) => {
       let el
       switch (questionType) {
@@ -48,7 +65,7 @@ class QuizzBotQuestion extends Component {
       })
     })
   }
-  getStyle (answer) {
+  getStyle(answer) {
     if (this.props.chosenAnswerIndex === 900) return ''
     if (this.props.chosenAnswerIndex === this.props.answerIndex) {
       if (answer === this.props.chosenAnswerIndex) return style.correct
@@ -57,8 +74,8 @@ class QuizzBotQuestion extends Component {
       if (answer === this.props.chosenAnswerIndex) return style.wrong
     }
   }
-  render () {
-    const {answerIndex, answersIndices} = this.props
+  render() {
+    const { answerIndex, answersIndices } = this.props
 
     return (
       <div className={style.quizzBotQuestion}>
