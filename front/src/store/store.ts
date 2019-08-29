@@ -65,9 +65,9 @@ export const typingReducer = (state = initialTypingState, action) => {
 export const userReducer = (state = initialChatUserState, action) => {
   switch (action.type) {
     case 'USER_SET_NAME':
-      return Object.assign(state, {userName: action.name})
+      return Object.assign(state, { userName: action.name })
     case 'SET_ROOM_NAME':
-      return Object.assign(state, {roomName: action.roomName})
+      return Object.assign(state, { roomName: action.roomName })
   }
   return state
 }

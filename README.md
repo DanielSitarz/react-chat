@@ -1,8 +1,6 @@
 # Based on react-webpack-babel
 
-Server part: [https://github.com/DanielSitarz/socket-chat-server]
-
-Run with `npm run dev` for development, `npm run build` for production and `npm test` for tests and standardjs code style check.
+Run with frontend with `npm run dev` for development, `npm run build` for production and `npm test` for tests and standardjs code style check.
 After setting up, chat is avaible on `/chat/room/:roomName`
 
 # Features
@@ -15,9 +13,6 @@ After setting up, chat is avaible on `/chat/room/:roomName`
 7. User names are random generated from arrays with adjectives and nouns. (it's fun, e.g. Depressed Snake or Dysfunctional Pancake)
 8. Messages are stored in localStorage so they doesn't dissapear after you leave and you can just delete them to be more private.
 9. It just works like a chat.
-
-# Why?
-I'm learning React which looks for me just awesome!
 
 # What's in it?
 1. [React](https://github.com/facebook/react) - for all those fancy renders methods and the components.
@@ -38,5 +33,4 @@ I'm learning React which looks for me just awesome!
 5. Scroll down when a lot of messages with images.
 6. Enter should send message...
 7. More tests, more!
-8. Hold send button to send bigger message (like in Messenger with emotes, already have 'power' property associated with message)
-9. Better notifications system (support multiple notifications, e.g. new message and count of new messages)
+8. Better notifications system (support multiple notifications, e.g. new message and count of new messages)
