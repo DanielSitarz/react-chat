@@ -5,11 +5,10 @@ import { addMessage } from '../store/actionCreators'
 export const TAG_SYMBOL = '!!'
 
 export default class Bot {
-  constructor (cmd, name) {
-    this.cmd = cmd
-    this.name = name
-  }
-  check (msg) {
+  msg: string;
+
+  constructor(protected cmd: string, protected name: string) { }
+  check(msg) {
     if (msg.indexOf(this.cmd) === -1) {
       return false
     }
@@ -20,16 +19,16 @@ export default class Bot {
 
     return true
   }
-  removeCmd (cmd, msg) {
+  removeCmd(cmd, msg) {
     return msg.slice(2 + cmd.length)
   }
-  getParams (msg) {
+  getParams(msg) {
     return msg.match(/\b\w*[\w',-]+\w*\b/g)
   }
-  parseParams (params) {
+  parseParams(params) {
 
   }
-  isTag (msg) {
+  isTag(msg) {
     if (!msg) return
     if (msg.slice(0, TAG_SYMBOL.length) === TAG_SYMBOL) {
       let data = JSON.parse(msg.slice(TAG_SYMBOL.length))
@@ -37,7 +36,7 @@ export default class Bot {
     }
     return false
   }
-  sendResponse (response) {
+  sendResponse(response) {
     if (!response) return
     if (response === '') return
     window.setTimeout(() => {
@@ -45,7 +44,7 @@ export default class Bot {
       socket.userSentMessage(response)
     }, 200 + 300 * Math.random())
   }
-  sendResponseOnlyToOthers (response) {
+  sendResponseOnlyToOthers(response) {
     socket.userSentMessage(response)
   }
 }

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 
-import * as style from '../style/Chat.scss'
+import style from '../style/Chat.scss'
 
 import Header from '../components/Header'
 import Messages from '../components/Messages'

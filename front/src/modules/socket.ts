@@ -1,4 +1,4 @@
-import 'socket.io-client'
+import io from 'socket.io-client'
 import store from '../store/store'
 import callbacksController from './callbacksController'
 import { userEnterTheRoom, userDisconnected, isTyping, stoppedTyping } from '../store/actionCreators'

@@ -18,20 +18,15 @@ module.exports = {
         ]
       }, {
         test: /\.scss$/,
+        exclude: /node_modules/,
         use: [
-          { loader: "style-loader" },
-          {
-            loader: "typings-for-css-modules-loader",
-            options: {
-              namedexport: true,
-              camelcase: true,
-              modules: true
-            }
-          },
-          { loader: "sass-loader" }
+          "style-loader",
+          "@teamsupercell/typings-for-css-modules-loader",
+          "css-loader"
         ]
       }, {
         enforce: "pre",
+        exclude: /node_modules/,
         test: /\.js$/,
         loader: "source-map-loader"
       }

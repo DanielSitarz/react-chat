@@ -1,34 +1,33 @@
-import React from 'react'
+import * as React from 'react'
 import store from '../store/store'
 import Bot, { TAG_SYMBOL } from './Bot'
-import shuffle from 'lodash/shuffle'
 import messagesCreator from '../helpers/messagesCreator'
 import QuizzBotQuestion from '../components/bots/QuizzBotQuestion'
 
-import {COUNTRY, CAPITAL, NO_ANSWER} from './quizzBotConsts'
+import { COUNTRY, CAPITAL, NO_ANSWER } from './quizzBotConsts'
+import shuffleArray from '../helpers/Shuffle';
 
 var countries
 
 export class QuizBot extends Bot {
-  constructor () {
-    super('quiz', 'Quiz Bot')
+  ready = false;
+  isWaitingForAnswerId = undefined
+  waitingForAnswerAbout = null
+  lastAskedCountryIndex = null
 
-    this.ready = false
+  points = 0
 
-    this.isWaitingForAnswerId = undefined
-    this.waitingForAnswerAbout = null
-    this.lastAskedCountryIndex = null
+  questionsMessages = {}
 
-    this.points = 0
-
-    this.questionsMessages = {}
-
-    this.isDownloadingData = {
-      countries: false
-    }
+  isDownloadingData = {
+    countries: false
   }
 
-  getData (type) {
+  constructor() {
+    super('quiz', 'Quiz Bot')
+  }
+
+  getData(type) {
     return new Promise((resolve, reject) => {
       switch (type) {
         case 'countries':
@@ -41,7 +40,7 @@ export class QuizBot extends Bot {
             } else {
               this.isDownloadingData[type] = true
               window.fetch('https://gist.githubusercontent.com/DanielSitarz/f896e575dee5daa810d219dd944b7df2/raw/c77bbbdd0195e4ffbd6d2dafa63843977b58613e/countries.json')
-              // window.fetch('http://danielsi.linuxpl.info/chat/countries.json')
+                // window.fetch('http://danielsi.linuxpl.info/chat/countries.json')
                 .then((r) => r.json()
                   .then((r) => {
                     countries = r
@@ -54,7 +53,7 @@ export class QuizBot extends Bot {
     })
   }
 
-  parseParams (params) {
+  parseParams(params) {
     if (!params || this.isWaitingForAnswerId) {
       return false
     }
@@ -67,8 +66,8 @@ export class QuizBot extends Bot {
     }
   }
 
-  askAboutCountry (questionType, answerType) {
-    this.getData('countries').then((countries) => {
+  askAboutCountry(questionType, answerType) {
+    this.getData('countries').then((countries: any[]) => {
       let randomCountry = this.getRandomFromArray(countries)
       let countryIndex = countries.indexOf(randomCountry)
 
@@ -85,7 +84,7 @@ export class QuizBot extends Bot {
     })
   }
 
-  checkAnswer (answer, id) {
+  checkAnswer(answer, id) {
     this.isWaitingForAnswerId = undefined
 
     let thisQuestion = this.questionsMessages[id]
@@ -98,7 +97,7 @@ export class QuizBot extends Bot {
     })
   }
 
-  sendAnswerModifierTag (questionMsg, answer) {
+  sendAnswerModifierTag(questionMsg, answer) {
     let tag = {
       cmd: this.cmd,
       type: 'modify',
@@ -111,13 +110,13 @@ export class QuizBot extends Bot {
     this.sendResponseOnlyToOthers(this.createMessage(TAG_SYMBOL + JSON.stringify(tag)))
   }
 
-  awaitAnswer (type, countryIndex, id) {
+  awaitAnswer(type, countryIndex, id) {
     this.isWaitingForAnswerId = id
     this.waitingForAnswerAbout = type
     this.lastAskedCountryIndex = countryIndex
   }
 
-  createQuestionTag (questionType, answerType, countryIndex, answersIndices, answerIndex) {
+  createQuestionTag(questionType, answerType, countryIndex, answersIndices, answerIndex) {
     let tag = {
       cmd: this.cmd,
       type: 'question',
@@ -133,7 +132,7 @@ export class QuizBot extends Bot {
     return TAG_SYMBOL + JSON.stringify(tag)
   }
 
-  createMessage (content) {
+  createMessage(content) {
     return messagesCreator.create({
       sender: this.name,
       isFromBot: true,
@@ -141,7 +140,7 @@ export class QuizBot extends Bot {
     })
   }
 
-  createQuestionElement (data) {
+  createQuestionElement(data) {
     return <QuizzBotQuestion
       {...data}
       handleAnswer={(answer, id) => this.handleAnswer(answer, id)}
@@ -149,16 +148,16 @@ export class QuizBot extends Bot {
     />
   }
 
-  handleAnswer (answer, id) {
+  handleAnswer(answer, id) {
     if (this.isWaitingForAnswerId !== id) return false
     return this.checkAnswer(answer, id)
   }
 
-  getRandomFromArray (arr) {
+  getRandomFromArray(arr) {
     return arr[Math.floor(Math.random() * arr.length)]
   }
 
-  getRandomAnswers (count, correct, arr) {
+  getRandomAnswers(count, correct, arr) {
     let answers = []
 
     for (let i = 0; i < count; i++) {
@@ -171,10 +170,10 @@ export class QuizBot extends Bot {
 
     answers.push(arr.indexOf(correct))
 
-    return shuffle(answers)
+    return shuffleArray(answers)
   }
 
-  getCountryProperty (countryIndex, property) {
+  getCountryProperty(countryIndex, property) {
     return new Promise((resolve, reject) => {
       this.getData('countries').then((countries) => {
         let country = countries[countryIndex]
@@ -186,7 +185,7 @@ export class QuizBot extends Bot {
     })
   }
 
-  parseTag (data) {
+  parseTag(data) {
     switch (data.type) {
       case 'question': return this.renderTag(data.payload)
       case 'modify': return this.updateQuestionAnswer(data.payload)
@@ -194,14 +193,14 @@ export class QuizBot extends Bot {
     }
   }
 
-  renderTag (data) {
+  renderTag(data) {
     let question = this.createQuestionElement(data)
 
     return question
   }
 
-  updateQuestionAnswer (data) {
-    let {id, content, answer} = data
+  updateQuestionAnswer(data) {
+    let { id, content, answer } = data
     store.dispatch({
       type: 'MODIFY_MSG',
       payload: {

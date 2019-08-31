@@ -1,15 +1,15 @@
 import Bot from './Bot'
 
 export default class RandomBot extends Bot {
-  constructor (sendResponse) {
-    super('rand', 'Random Bot', sendResponse)
+  constructor(sendResponse) {
+    super('rand', 'Random Bot')
   }
 
-  getResponse (params) {
+  getResponse(params) {
     this.parseParams(params)
   }
 
-  parseParams (params) {
+  parseParams(params) {
     console.log(params)
     if (!params) {
       this.showHelp()
@@ -18,7 +18,7 @@ export default class RandomBot extends Bot {
 
     switch (params.length) {
       case 1:
-        this.random(params[0], params[1])
+        this.random(params[0] || params[1])
         break
       case 2:
         this.randomRange(params[0], params[1])
@@ -28,18 +28,18 @@ export default class RandomBot extends Bot {
     }
   }
 
-  showHelp () {
-    this.sendResponse(this, '!rand min max')
+  showHelp() {
+    this.sendResponse('!rand min max')
   }
 
-  random (max) {
+  random(max) {
     this.randomRange(1, max)
   }
 
-  randomRange (min, max) {
+  randomRange(min, max) {
     min = parseInt(min)
     max = parseInt(max)
     let rand = Math.floor(Math.random() * (max - min + 1)) + min
-    this.sendResponse(this, rand)
+    this.sendResponse(rand)
   }
 }

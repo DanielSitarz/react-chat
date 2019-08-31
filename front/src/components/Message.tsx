@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 import chatStyle from '../style/Chat.scss'
-import '../style/animations.scss'
 
 import bots from '../bots/bots'
 
